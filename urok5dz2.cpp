@@ -7,13 +7,15 @@ class Figura
 protected:
     std::string name_figura;
 
+    virtual std::string get_info_storona() { return ""; }
+    virtual std::string get_info_ugol() { return ""; }
+
 public:
     Figura() {};
 
-    std::string get_name() {
-        return this->name_figura;
-    }
-
+    void print_info(Figura* f) {
+        std::cout << this->name_figura << ":\n" << f->get_info_storona() << "\n" << f->get_info_ugol() << "\n\n";
+    };
 };
 
 //// трехугольник
@@ -30,7 +32,6 @@ protected:
     int c = 0;
 
 public:
-    Triangle() {};
     Triangle(int A, int B, int C, int a, int b, int c) {
         name_figura = "Треугольник";
         this->A = A;
@@ -41,29 +42,22 @@ public:
         this->c = c;
     };
 
-    std::string get_info_storona() {
+    std::string get_info_storona() override {
         return "Стороны: a=" + std::to_string(this->a) + " b=" + std::to_string(this->b) + " c=" + std::to_string(this->c);
     }
 
-    std::string get_info_ugol() {
-        return "Углы: A=" + std::to_string(this->a) + " B=" + std::to_string(this->b) + " C=" + std::to_string(this->c);
-    }
+    std::string get_info_ugol() override {
+        return "Углы: A=" + std::to_string(this->A) + " B=" + std::to_string(this->B) + " C=" + std::to_string(this->C);
+    }    
 };
 
 // прямой треугольник
 class Triangle90 : public Triangle
 {
-private:
-    int C = 90;
 
 public:
-    Triangle90(int A, int B, int a, int b, int c) {
-        name_figura = "Прямоугольник";
-        this->A = A;
-        this->B = B;
-        this->a = a;
-        this->b = b;
-        this->c = c;
+    Triangle90(int A, int B, int a, int b, int c) : Triangle(A, B, 90, a, b, c) {
+        name_figura = "Прямоугольный треугольник";
     };
 };
 
@@ -71,31 +65,18 @@ public:
 class Triangle2line : public Triangle
 {
 public:
-    Triangle2line(int A, int B, int a, int b) {
+    Triangle2line(int A, int B, int a, int b) : Triangle(A, B, B, a, b, b) {
         name_figura = "Равнобедренный треугольник";
-        this->a = a;
-        this->b = b;
-        this->c = b;
-        this->A = A;
-        this->B = B;
-        this->C = B;
     };
 };
 
 // равносторонний
 class Triangle3line : public Triangle
 {
-private:
-    int A = 60;
-    int B = 60;
-    int C = 60;
 
 public:
-    Triangle3line(int a) {
+    Triangle3line(int a) : Triangle(60, 60, 60, a, a, a) {
         name_figura = "Равносторонний треугольник";
-        this->a = a;
-        this->b = a;
-        this->c = a;
     };
 };
 
@@ -115,7 +96,6 @@ protected:
     int d = 0;
 
 public:    
-    Quatro() {};
     Quatro(int A, int B, int C, int D, int a, int b, int c, int d) {
           name_figura = "Квадрат";
           this->A = A;
@@ -129,11 +109,11 @@ public:
       };
 
 
-    std::string get_info_storona() {
+    std::string get_info_storona() override {
         return "Стороны: a=" + std::to_string(this->a) + " b=" + std::to_string(this->b) + " c=" + std::to_string(this->c) + " d=" + std::to_string(this->d);
     }
 
-    std::string get_info_ugol() {
+    std::string get_info_ugol() override {
         return "Углы: A=" + std::to_string(this->A) + " B=" + std::to_string(this->B) + " C=" + std::to_string(this->C) + " D=" + std::to_string(this->D);
     }
 };
@@ -141,33 +121,16 @@ public:
 // Параллелограмм
 class Parrallelogram : public Quatro {
 public:
-    Parrallelogram() {};
-    Parrallelogram(int A, int B, int a, int b) {
+    Parrallelogram(int A, int B, int a, int b) : Quatro(A, B, A, B, a, b, a, b) {
         this->name_figura = "Параллелограмм";
-        this->A = A;
-        this->B = B;
-        this->C = A;
-        this->D = B;
-        this->a = a;
-        this->b = b;
-        this->c = a;
-        this->d = b;
     };
 };
 
 // ромб
 class Romb : public Parrallelogram {
 public:
-    Romb(int a, int A, int B) {
+    Romb(int a, int A, int B) :Parrallelogram(A, B, a, a) {
         name_figura = "Ромб";
-        this->a = a;
-        this->b = a;
-        this->c = a;
-        this->d = a;
-        this->A = A;
-        this->B = B;
-        this->C = A;
-        this->D = B;
     };
 };
 
@@ -175,42 +138,26 @@ public:
 class Pramougolnik : public Parrallelogram {
 
 public:
-    Pramougolnik()  {
-        A = 90;
-        B = 90;
-        C = 90;
-        D = 90;
-    };
-    Pramougolnik(int a, int b) : Pramougolnik() {
+    Pramougolnik(int a, int b) :Parrallelogram(90, 90, a, b) {
         name_figura = "Прямоугольник";
-        this->a = a;
-        this->b = b;
-        this->c = a;
-        this->d = b;
     };
 };
 
 // Квадрат 
 class Kvadrat : public Pramougolnik {
 public:
-    Kvadrat(int a)  {
+    Kvadrat(int a) : Pramougolnik(a, a) {
         name_figura = "Квадрат";
-        this->a = a;
-        this->b = a;
-        this->c = a;
-        this->d = a;
     };
 };
-
-
-
-
 
 
 int main()
 {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
+
+
 
     //Figura figura;
     Triangle triangle(10,20,30,50,60,70);
@@ -223,13 +170,13 @@ int main()
     Pramougolnik pramougolnik(10, 20);
     Kvadrat kvadrat(20);
 
-    std::cout << triangle.get_name() << ":\n" << triangle.get_info_storona() << "\n" << triangle.get_info_ugol() << "\n\n";
-    std::cout << triangle90.get_name() << ":\n" << triangle90.get_info_storona() << "\n" << triangle90.get_info_ugol() << "\n\n";
-    std::cout << triangle2line.get_name() << ":\n" << triangle2line.get_info_storona() << "\n" << triangle2line.get_info_ugol() << "\n\n";
-    std::cout << triangle3line.get_name() << ":\n" << triangle3line.get_info_storona() << "\n" << triangle3line.get_info_ugol() << "\n\n";
-    std::cout << quatro.get_name() << ":\n" << quatro.get_info_storona() << "\n" << quatro.get_info_ugol() << "\n\n";
-    std::cout << parrallelogram.get_name() << ":\n" << parrallelogram.get_info_storona() << "\n" << parrallelogram.get_info_ugol() << "\n\n";
-    std::cout << romb.get_name() << ":\n" << romb.get_info_storona() << "\n" << romb.get_info_ugol() << "\n\n";
-    std::cout << pramougolnik.get_name() << ":\n" << pramougolnik.get_info_storona() << "\n" << pramougolnik.get_info_ugol() << "\n\n";
-    std::cout << kvadrat.get_name() << ":\n" << kvadrat.get_info_storona() << "\n" << kvadrat.get_info_ugol() << std::endl;
+    triangle.print_info(&triangle);
+    triangle90.print_info(&triangle90);
+    triangle2line.print_info(&triangle2line);
+    triangle3line.print_info(&triangle3line);
+    quatro.print_info(&quatro);
+    parrallelogram.print_info(&parrallelogram);
+    romb.print_info(&romb);
+    pramougolnik.print_info(&pramougolnik);
+    kvadrat.print_info(&kvadrat);
 }
